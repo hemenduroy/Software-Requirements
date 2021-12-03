@@ -1,0 +1,53 @@
+version: '3.2'
+services:
+      gdpsv2:
+        image: gdpsv2
+        build: ./gdpsv2
+        volumes:
+        - type: bind
+          source: ./gdpsv2/ro
+          target: /home/chall/service/ro
+          read_only: true
+        - type: bind
+          source: ./gdpsv2/rw
+          target: /home/chall/service/rw
+        - type: bind
+          source: ./gdpsv2/append
+          target: /home/chall/service/append
+        ports:
+        - "10001:6666"
+        restart: always
+      postboxv2:
+        image: postboxv2
+        build: ./postboxv2
+        volumes:
+        - type: bind
+          source: ./postboxv2/ro
+          target: /home/chall/service/ro
+          read_only: true
+        - type: bind
+          source: ./postboxv2/rw
+          target: /home/chall/service/rw
+        - type: bind
+          source: ./postboxv2/append
+          target: /home/chall/service/append
+        ports:
+        - "10002:6666"
+        restart: always
+      ghorme_sabzi:
+        image: ghorme_sabzi
+        build: ./ghorme_sabzi
+        volumes:
+        - type: bind
+          source: ./ghorme_sabzi/ro
+          target: /home/chall/service/ro
+          read_only: true
+        - type: bind
+          source: ./ghorme_sabzi/rw
+          target: /home/chall/service/rw
+        - type: bind
+          source: ./ghorme_sabzi/append
+          target: /home/chall/service/append
+        ports:
+        - "10003:6666"
+        restart: always

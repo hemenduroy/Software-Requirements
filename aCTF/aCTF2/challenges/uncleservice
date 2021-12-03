@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+
+import sys
+import random
+import os
+import string
+import hashlib
+
+
+RW_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "rw")
+
+charset = string.ascii_lowercase + string.ascii_uppercase + string.digits
+
+
+def donate_book():
+    print("####### Donate Book ######")
+    book_id = "".join(random.choice(charset) for _ in range(8))
+    print("Unique book ID: %s" % book_id)
+    sys.stdout.write("What is the name of the book?\n")
+    book_name = input().strip(" \n")  # Note: this is where flags go
+
+    # we need a strong password...
+    passphrase = ''.join(random.choice(charset) for _ in range(20))
+
+    file_path = os.path.join(RW_DIR, book_id)
+    with open(file_path, "w") as f:
+        # passphrase
+        f.write(hashlib.sha256(passphrase.encode("ascii")).hexdigest() + "\n")
+        # book name
+        f.write(book_name)
+
+    print("Thank you for donating book %s!" % book_name)
+    print("The passphrase for your awesome book is %s." % passphrase)
+    print("You may come back and take away your book at any time as long as you have the passphrase!")
+    print("Thanks again for supporting our library!")
+
+
+def borrow_book():
+    print("####### Borrow Book ######")
+    sys.stdout.write("Unique book ID: ")
+    book_id = input().strip(" \n")
+
+    file_path = os.path.join(RW_DIR, book_id)
+    if not os.path.isfile(file_path):
+        print("Error - the requested book does not exist in our library.")
+        return
+
+    sys.stdout.write("The requested book is in our library.\n")
+    # check book status
+    with open(file_path, "r") as f:
+        data = f.read().split("\n")
+    if len(data) == 3:
+        # if there are three lines in the file, the book has been borrowed, and the first line is the borrow code
+        print("Book status: Borrowed")
+        return
+    elif len(data) == 2:
+        # if there are two lines in the file, the book has not been borrowed. The first line is the passphrase.
+        print("Book status: In library")
+    else:
+        print("Book status: Unknown... something is wrong")
+        return
+
+    sys.stdout.write("Please input your borrow code. You will need the borrow code to return the book!\n")
+    borrow_code = input("Borrow code: ").strip(" \n")
+    borrow_code = eval('"' + borrow_code + '"')
+
+    with open(file_path, "r") as f:
+        lines = f.read().split("\n")
+    # Add a new line in the front
+    lines = [borrow_code] + lines
+
+    with open(file_path, "w") as f:
+        f.write("\n".join(lines))
+
+    print("Your borrow code has been written to our database!")
+    print("Please return your book on time!")
+
+
+def return_book():
+    print("####### Return Book ######")
+    sys.stdout.write("Unique book ID: ")
+    book_id = input().strip(" \n")
+    book_id = eval('"' + book_id + '"')
+
+    file_path = os.path.join(RW_DIR, book_id)
+    if not os.path.isfile(file_path):
+        print("Error - the requested book does not exist in our library.")
+        return
+
+    sys.stdout.write("Your borrow code: ")
+    borrow_code = input().strip(" \n")
+    borrow_code = eval('"' + borrow_code + '"')
+
+    with open(file_path, "r") as f:
+        lines = f.read().split("\n")
+
+    if len(lines) == 2:
+        # there are two lines in the file. The book is not borrowed by anyone!
+        print("Error - the book is still in our library")
+        return
+
+    # more than two lines. The first line is the borrow code
+    if borrow_code == lines[0]:
+        print("Thank you for returning the book %s!" % book_id)
+    else:
+        print("Error - incorrect borrow code!")
+        return
+    # take the last two lines (passphrase and book name)
+    lines = lines[-2:]
+
+    with open(file_path, "w") as f:
+        f.write("\n".join(lines))
+
+
+def read_my_book():
+    print("####### Read My Book ######")
+    sys.stdout.write("Unique book ID: ")
+    book_id = input().strip(" \n")
+
+    file_path = os.path.join(RW_DIR, book_id)
+    if not os.path.isfile(file_path):
+        print("Error - the requested book does not exist in our library.")
+        return
+
+    with open(file_path, "r") as f:
+        data = f.read().split("\n")
+    if len(data) == 2:
+        # when there are only two lines, the first line is the hashed passphrase
+        hash_0 = data[0]
+    else:
+        # when there are three lines, the second line is the hashed passphrase
+        hash_0 = data[1]
+
+    sys.stdout.write("Are you really the book owner? Your passphrase please: ")
+    passphrase = input().strip(" \n")
+
+    # check the passphrase
+    hash_1 = hashlib.sha256(passphrase.encode("ascii")).hexdigest()
+
+    # compare each byte of the hashes
+    if hash_0 == hash_1:
+        print("Here is the name of your precious book: %s" % data[-1])
+        print("Thank you for supporting us!")
+    else:
+        print("Error - Your passphrase is incorrect!")
+
+
+def serv():
+    print("#" * 20)
+    print("Hello, thank you for coming to our library!")
+    #print("#" * 20)
+    print("#" * 20)
+    print("What do you want to do today?")
+    print("1. I want to donate a book")
+    print("2. Borrow a book")
+    print("3. Return a book")
+    print("4. Read my donated book (passphrase required)")
+    print("5. Exit")
+    sys.stdout.write("Your choice (1-5): ")
+    sys.stdout.flush()
+
+    choice = input().strip(" \n")
+    if choice == "1":
+        donate_book()
+    elif choice == "2":
+        borrow_book()
+    elif choice == "3":
+        return_book()
+    elif choice == "4":
+        read_my_book()
+    elif choice == "5":
+        print("Bye-bye!")
+        return
+    else:
+        print("Invalid choice. Try again.")
+        return
+
+
+if __name__ == "__main__":
+    serv()
+

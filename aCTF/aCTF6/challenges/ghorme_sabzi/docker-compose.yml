@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+  ghorme_sabzi:
+    image: ghorme_sabzi
+    volumes:
+      - type: bind
+        source: ./ro
+        target: /home/chall/service/ro
+        read_only: true
+      - type: bind
+        source: ./rw
+        target: /home/chall/service/rw
+      - type: bind
+        source: ./root_owned
+        target: /home/chall/service/root_owned
+      - type: bind
+        source: ./.append
+        target: /home/chall/service/.append
+    ports:
+      - "6666:6666"
