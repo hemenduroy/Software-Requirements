@@ -1,0 +1,1 @@
+pip3 install --user -U pip; pip3 install swpag_client; pip3 install --user ipython; pip3 install pwntools
