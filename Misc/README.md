@@ -17,7 +17,7 @@ for i in spaces:
 	print(chr(i),end="")
 ```
 
-Flag - CSE545{SnOmmpmKbyZjGv6TA8thFzn6uVQqwgl9}
+Flag - **CSE545{SnOmmpmKbyZjGv6TA8thFzn6uVQqwgl9}**
 
 **Level02**
 
@@ -44,13 +44,13 @@ for y in range(img.size[1]):
 
 I got the message -
 
-Good job! Here is a flag for you: CSE545{99hz3p4tfn10pgdxjt57} . Enjoy!
+Good job! Here is a flag for you: **CSE545{99hz3p4tfn10pgdxjt57}** . Enjoy!
 
 **Level03**
 
 I used binwalk and noticed that there are 2 binaries. Decompiling the next one revealed the flag.
 
-Flag - CSE545{tuodpyfrb5z12sguj7l8}
+Flag - **CSE545{tuodpyfrb5z12sguj7l8}**
 
 **Level04**
 
@@ -78,4 +78,4 @@ for crc in crcs:
 			print(i.decode("utf-8"),end="")
 ```
 
-Flag - CSE545{G63rZIeZxWxrkB9T8haZavp07ospTnL1}
+Flag - **CSE545{G63rZIeZxWxrkB9T8haZavp07ospTnL1}**
