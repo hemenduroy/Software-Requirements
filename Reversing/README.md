@@ -1,10 +1,10 @@
 # Reversing Writeup
 
-**Level 01**
+## **Level 01**
 
 I decompiled the binary and saw that simply providing `NYduy7SRP8cZy0tR9my6` as the input gives us the flag
 
-**Level 02**
+## **Level 02**
 
 The same as level01 but with a mangle() function. I reversed the obfuscation in ipython3
 
@@ -12,7 +12,7 @@ The same as level01 but with a mangle() function. I reversed the obfuscation in 
     print(chr(ord(k)- 0x03),end='')
 
 ```
-**Level 03**
+## **Level 03**
 
 Like level02 but with an extra step
 
@@ -22,7 +22,7 @@ Like level02 but with an extra step
 
 ```
 
-**Level 04**
+## **Level 04**
 
 I threw the 4 equations in wolfram alpha and got the result
 
@@ -35,7 +35,7 @@ equations:
 
 final answer: 19805-44102-90161-72493
 
-**Level 05**
+## **Level 05**
 
 It was a game of true and false conditions leading to one point that set the return value to 1. I manually went through all bit conditions of each byte and got the following binary sequence
 
@@ -44,10 +44,10 @@ It was a game of true and false conditions leading to one point that set the ret
 
 converted it to ASCII - `7FCV5ROIA4Y9y3rH58hW`
 
-**Level 06**
+## **Level 06**
 
 Similar to level05. since the return value was initialised with 0, all i had to do was make sure every if condition evaluated to false. final string was - `67gW6YmKvUpaqoAX1F4l`
 
-**Level 07**
+## **Level 07**
 
 This one seemed really hard at first until I understood what the code was doing. it was a maze game with 'wasd' controls and the end goal being to reach point (1,11). Also, only 0s were valid paths. final string was - `ssssdsssddwdwdddwwwwddd`
